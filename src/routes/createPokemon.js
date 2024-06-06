@@ -1,3 +1,4 @@
+const { ValidationError, UniqueConstraintError } = require('sequelize')
 const { Pokemon } = require('../db/sequelize')
   
 module.exports = (app) => {
@@ -8,6 +9,12 @@ module.exports = (app) => {
         res.json({ message, data: pokemon })
       })
       .catch(err => {
+        if(err instanceof ValidationError){
+          return res.status(400).json({message: err.message, data: err})
+        }
+        if(err instanceof UniqueConstraintError) {
+          return res.status(400).json({message: err.message, data: err})
+        }
         const message = `La liste des pokemons n'a pas pu etre ajouté. Réessayez dans quelques instqnts.`
         res.status(500).json({message, data: err})
       })
