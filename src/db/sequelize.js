@@ -1,24 +1,36 @@
-/* L’API Rest et la Base de données : Créer un modèle Sequelize */
 const { Sequelize, DataTypes } = require('sequelize')
 const PokemonModel = require('../models/Pokemon')
 const UserModel = require('../models/User')
 const pokemons = require('./mock-pokemon')
 const bcrypt = require('bcrypt')
-  
-const sequelize = new Sequelize('pokedex', 'root', '', {
-  host: 'localhost',
-  dialect: 'mariadb',
-  dialectOptions: {
-    timezone: 'Etc/GMT-2',
-  },
-  logging: false
-})
+
+let sequelize
+
+if(process.env.NODE_ENV === 'production'){
+  sequelize = new Sequelize('j6azts68cqkt8cgc', 'c36llrn69z75eomq', 'g377ggg0pub306mf', {
+    host: 'iu51mf0q32fkhfpl.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+    dialect: 'mariadb',
+    dialectOptions: {
+      timezone: 'Etc/GMT-2',
+    },
+    logging: true
+  }) 
+} else {
+  sequelize = new Sequelize('pokedex', 'root', '', {
+    host: 'localhost',
+    dialect: 'mariadb',
+    dialectOptions: {
+      timezone: 'Etc/GMT-2',
+    },
+    logging: false
+  })
+}
   
 const Pokemon = PokemonModel(sequelize, DataTypes)
 const User = UserModel(sequelize, DataTypes)
   
 const initDb = () => {
-  return sequelize.sync({force: true}).then(_ => {
+  return sequelize.sync().then(_ => {
     pokemons.map(pokemon => {
       Pokemon.create({
         name: pokemon.name,

@@ -4,7 +4,8 @@
   "description": "An awesome API Rest to handle some pokemon",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "NODE_ENV=production node app.js",
+    "dev": "NODE_ENV=development nodemon app.js"
   },
   "author": "Perrin Emmanuel NZAOU",
   "license": "ISC",
@@ -16,8 +17,5 @@
     "mariadb": "^3.3.0",
     "sequelize": "^6.37.3",
     "serve-favicon": "^2.5.0"
-  },
-  "devDependencies": {
-    "morgan": "^1.10.0"
   }
 }
